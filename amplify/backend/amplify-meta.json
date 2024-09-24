@@ -1,0 +1,58 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hydenflutter-dev-30f6a-authRole",
+      "UnauthRoleArn": "arn:aws:iam::205930639913:role/amplify-hydenflutter-dev-30f6a-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::205930639913:role/amplify-hydenflutter-dev-30f6a-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-hydenflutter-dev-30f6a-deployment",
+      "UnauthRoleName": "amplify-hydenflutter-dev-30f6a-unauthRole",
+      "StackName": "amplify-hydenflutter-dev-30f6a",
+      "StackId": "arn:aws:cloudformation:us-west-2:205930639913:stack/amplify-hydenflutter-dev-30f6a/3d297d30-7599-11ef-b5fb-0abf076d2449",
+      "AmplifyAppId": "d2df0qtrqa4rp1"
+    }
+  },
+  "auth": {
+    "hydenflutter95ec4bae": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-hydenflutter-dev-30f6a-deployment/amplify-cfn-templates/auth/hydenflutter95ec4bae-cloudformation-template.json",
+        "logicalId": "authhydenflutter95ec4bae"
+      },
+      "lastPushTimeStamp": "2024-09-18T08:44:01.222Z",
+      "output": {
+        "UserPoolId": "us-west-2_xBfefGkMk",
+        "AppClientIDWeb": "66of9e4q68psu69mlrmp4tgars",
+        "AppClientID": "3ghq67jhgr6p5o1c02mnf3pqul",
+        "IdentityPoolId": "us-west-2:56c4393b-cd9c-4fe3-ae4e-8d26cfa5f961",
+        "UserPoolArn": "arn:aws:cognito-idp:us-west-2:205930639913:userpool/us-west-2_xBfefGkMk",
+        "IdentityPoolName": "hydenflutter95ec4bae_identitypool_95ec4bae__dev",
+        "UserPoolName": "hydenflutter95ec4bae_userpool_95ec4bae"
+      },
+      "lastPushDirHash": "Gc028bKHcI8C+El6wr/fhsd9s2Y="
+    }
+  }
+}
