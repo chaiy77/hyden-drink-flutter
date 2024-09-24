@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:get/get.dart';
+import 'package:hydenflutter/stores/controller/userController.dart';
 
 const primaryColor = Color(0xFF685BFF);
 const canvasColor = Color(0xFF2E2E48);
@@ -42,6 +44,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
+
     _controller.selectIndex(menuIndex);
     return SafeArea(
         child: Scaffold(
@@ -86,6 +89,7 @@ class SidebarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Get.put(Usercontroller());
     String url =
         GoRouter.of(context).routerDelegate.currentConfiguration.fullPath;
     // debugPrint("---------- Current Path -----------");
@@ -144,13 +148,18 @@ class SidebarMenu extends StatelessWidget {
       ),
       footerDivider: divider,
       headerBuilder: (context, extended) {
-        return const SizedBox(
-          height: 100,
-          child: Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text('Header'),
+        return Obx(
+          () {
+            return SizedBox(
+                height: 100,
+                child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: user.username.value != null
+                        ? Text(user.username.value,
+                            style: TextStyle(color: Colors.white))
+                        : Text('User', style: TextStyle(color: Colors.white))));
             // child: Image.asset('assets/images/avatar.png'),
-          ),
+          },
         );
       },
       items: [

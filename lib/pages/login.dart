@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hydenflutter/components/mainLayout.dart';
 
 class LoginPage extends StatefulWidget {
@@ -65,8 +66,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: Column(children: [
                         Padding(
                           padding: const EdgeInsets.all(20),
-                          child: Image.asset(
-                            'assets/images/iget-square.png',
+                          child: SvgPicture.asset(
+                            'images/iget_logo.svg',
                             width: 200,
                             height: 200,
                           ),

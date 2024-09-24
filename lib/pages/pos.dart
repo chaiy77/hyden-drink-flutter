@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hydenflutter/components/mainLayout.dart';
+import 'package:hydenflutter/views/pos/pos.dart';
 
 class Pos extends StatefulWidget {
   const Pos({super.key});
@@ -11,10 +12,7 @@ class Pos extends StatefulWidget {
 class _PosState extends State<Pos> {
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-        menuIndex: 0,
-        body: Container(
-            margin: const EdgeInsets.all(50), child: const Text('Pos')));
+    return MainLayout(menuIndex: 0, body: POSView());
     // return const SafeArea(child: Scaffold(body: Center(child: Text('Pos'))));
   }
 }

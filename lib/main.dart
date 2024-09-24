@@ -4,14 +4,34 @@ import 'package:hydenflutter/pages/login.dart';
 import 'package:hydenflutter/pages/setting.dart';
 import 'package:hydenflutter/pages/manufacture.dart';
 import 'package:hydenflutter/pages/report.dart';
-
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'amplifyconfiguration.dart';
 
-void main() {
-  //https://stackoverflow.com/questions/74944460/flutter-web-why-is-there-a-hashtag-in-the-url
-  usePathUrlStrategy();
-  runApp(const MyApp());
+Future<void> main() async {
+  try {
+    //https://stackoverflow.com/questions/74944460/flutter-web-why-is-there-a-hashtag-in-the-url
+    usePathUrlStrategy();
+    WidgetsFlutterBinding.ensureInitialized();
+    await _configureAmplify();
+    runApp(const MyApp());
+  } on AmplifyException catch (e) {
+    runApp(Text("Error configuring Amplify: ${e.message}"));
+  }
+}
+
+Future<void> _configureAmplify() async {
+  try {
+    await Amplify.addPlugin(AmplifyAuthCognito());
+    await Amplify.configure(amplifyconfig);
+    safePrint('Successfully configured');
+  } on Exception catch (e) {
+    safePrint('Error configuring Amplify: $e');
+  }
 }
 
 class MyApp extends StatefulWidget {
