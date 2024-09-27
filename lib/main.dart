@@ -5,12 +5,14 @@ import 'package:hydenflutter/pages/setting.dart';
 import 'package:hydenflutter/pages/manufacture.dart';
 import 'package:hydenflutter/pages/report.dart';
 import 'package:hydenflutter/pages/verify.dart';
+import 'package:hydenflutter/pages/register.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 // // import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
+import 'package:hydenflutter/stores/controller/userController.dart';
 import 'amplifyconfiguration.dart';
 
 Future<void> main() async {
@@ -33,6 +35,14 @@ Future<void> _configureAmplify() async {
   } on Exception catch (e) {
     safePrint('Error configuring Amplify: $e');
   }
+}
+
+class AuthMiddleWare extends GetMiddleware {
+  final user = Get.put(UserController());
+
+  @override
+  RouteSettings? redirect(String? route) =>
+      !user.isLoggedIn.value ? const RouteSettings(name: '/') : null;
 }
 
 class MyApp extends StatelessWidget {
@@ -72,11 +82,24 @@ class MyApp extends StatelessWidget {
 //   // ]);
   final _router = [
     GetPage(name: '/', page: () => const LoginPage()),
-    GetPage(name: '/pos', page: () => const PosPage()),
-    GetPage(name: '/manufacture', page: () => const ManufacturePage()),
-    GetPage(name: '/report', page: () => const ReportPage()),
-    GetPage(name: '/setting', page: () => const SettingPage()),
-    GetPage(name: '/verify', page: () => const VerifyPage())
+    GetPage(
+        name: '/pos',
+        page: () => const PosPage(),
+        middlewares: [AuthMiddleWare()]),
+    GetPage(
+        name: '/manufacture',
+        page: () => const ManufacturePage(),
+        middlewares: [AuthMiddleWare()]),
+    GetPage(
+        name: '/report',
+        page: () => const ReportPage(),
+        middlewares: [AuthMiddleWare()]),
+    GetPage(
+        name: '/setting',
+        page: () => const SettingPage(),
+        middlewares: [AuthMiddleWare()]),
+    GetPage(name: '/verify', page: () => const VerifyPage()),
+    GetPage(name: '/register', page: () => const RegisterPage()),
   ];
 
 // This widget is the root of your application.

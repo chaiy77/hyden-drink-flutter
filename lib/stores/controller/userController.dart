@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
-// import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 
 class UserController extends GetxController {
-  var username = ''.obs;
+  var username = 'Test'.obs;
+  var id = ''.obs;
   var email = ''.obs;
   var isLoggedIn = false.obs;
   var isWaiting = false.obs;
+  var verified = false.obs;
 
   @override
   void onInit() {
@@ -36,36 +38,28 @@ class UserController extends GetxController {
     // https://pub.dev/documentation/amplify_auth_cognito/latest/amplify_auth_cognito/AmplifyAuthCognito/getCurrentUser.html
     try {
       final result = await Amplify.Auth.getCurrentUser();
-      safePrint('user = ${result.username}');
-      isLoggedIn(true);
+      safePrint('user = ${result.userId}');
+      id.value = result.userId;
+
+      final userAttr = await Amplify.Auth.fetchUserAttributes();
+      for (final e in userAttr) {
+        switch (e.userAttributeKey.toString()) {
+          case 'email':
+            email.value = e.value;
+        }
+      }
+
+      // username.value = result.signInDetails['username'];
+      isLoggedIn.value = true;
 
       // return true;
     } on AuthException catch (e) {
       safePrint('Could not retrieve current user: ${e.message}');
-      isLoggedIn(false);
-
-      // return false;
+      isLoggedIn.value = false;
     }
   }
 
-  // Future<void> register() async {
-  //   isWaiting(true);
-  //   try {
-  //     safePrint('UserController -> Register');
-  //     await Future.delayed(const Duration(seconds: 3));
-  //     setUserName('Test');
-  //     //await _auth.signInWithEmailAndPassword(email: email, password: password);
-  //     isLoggedIn(true);
-  //   } catch (e) {
-  //     //Get.snackbar('Error', e.toString());
-  //   } finally {
-  //     isWaiting(false);
-  //   }
-  // }
-
-  /// Signs a user up with a username, password, and email. The required
-  /// attributes may be different depending on your app's configuration.
-  Future<void> register({
+  Future<bool> register({
     required String email,
     required String password,
   }) async {
@@ -86,12 +80,57 @@ class UserController extends GetxController {
             userAttributes: userAttributes,
           ),
         );
-        await _handleRegisterResult(result);
+        final signUpResult = await _handleRegisterResult(result);
+        if (signUpResult) {
+          return true;
+        } else {
+          return false;
+        }
       } on AuthException catch (e) {
         safePrint('Error signing up user: ${e.message}');
+        return false;
       }
     }
-    safePrint(' ========================== ');
+    return false;
+  }
+
+  Future<bool> confirmUser(
+      {required String username, required String confirmationCode}) async {
+    safePrint('=========== UserController -> confirmUser ====== ');
+    try {
+      final result = await Amplify.Auth.confirmSignUp(
+        username: username,
+        confirmationCode: confirmationCode,
+      );
+      // Check if further confirmations are needed or if
+      // the sign up is complete.
+
+      safePrint('result = ${result.toString()}');
+      safePrint('-----------------------------------');
+      if (await _handleRegisterResult(result)) {
+        return true;
+      }
+    } on AuthException catch (e) {
+      safePrint('Error confirming user: ${e.message}');
+      safePrint('-----------------------------------');
+      return false;
+    }
+    return false;
+  }
+
+  Future<bool> _handleRegisterResult(SignUpResult result) async {
+    safePrint('signup result handle ');
+    switch (result.nextStep.signUpStep) {
+      case AuthSignUpStep.confirmSignUp:
+        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
+        safePrint(codeDeliveryDetails.toString());
+        // _handleCodeDelivery(codeDeliveryDetails);
+        return true;
+
+      case AuthSignUpStep.done:
+        safePrint('Sign up is complete');
+        return true;
+    }
   }
 
   Future<void> login({required String email, required String password}) async {
@@ -108,10 +147,10 @@ class UserController extends GetxController {
       // await _auth.signInWithEmailAndPassword(email: email, password: password);
       safePrint(result.toString());
       await _handleSignInResult(result);
-      // isLoggedIn(true);
+      isLoggedIn(true);
     } on AuthException catch (e) {
       safePrint('Error signing in: ${e.message}');
-    } finally {
+      isLoggedIn(false);
       isWaiting(false);
     }
   }
@@ -160,16 +199,14 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> _handleRegisterResult(SignUpResult result) async {
-    switch (result.nextStep.signUpStep) {
-      case AuthSignUpStep.confirmSignUp:
-        final codeDeliveryDetails = result.nextStep.codeDeliveryDetails!;
-        safePrint(codeDeliveryDetails.toString());
-        // _handleCodeDelivery(codeDeliveryDetails);
-        break;
-      case AuthSignUpStep.done:
-        safePrint('Sign up is complete');
-        break;
+  Future<void> signOut() async {
+    safePrint('userController -> signOut');
+    final result = await Amplify.Auth.signOut();
+    if (result is CognitoCompleteSignOut) {
+      safePrint('Sign out completed successfully');
+      Get.offAllNamed('/');
+    } else if (result is CognitoFailedSignOut) {
+      safePrint('Error signing user out: ${result.exception.message}');
     }
   }
 

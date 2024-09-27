@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
-// import 'package:hydenflutter/stores/controller/userController.dart';
+import 'package:hydenflutter/stores/controller/userController.dart';
+import 'package:hydenflutter/components/signOutButton.dart';
 
 const primaryColor = Color(0xFF685BFF);
 const canvasColor = Color(0xFF2E2E48);
@@ -32,11 +33,7 @@ class MainLayout extends StatelessWidget {
   final Widget body;
   final int menuIndex;
   final _key = GlobalKey<ScaffoldState>();
-
-  // @override
-  // void initState(){
-  //   _menuIndex = menuIndex;
-  // }
+  final user = Get.put(UserController());
 
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
 
@@ -79,12 +76,13 @@ class MainLayout extends StatelessWidget {
 }
 
 class SidebarMenu extends StatelessWidget {
-  const SidebarMenu({
+  SidebarMenu({
     super.key,
     required SidebarXController controller,
   }) : _controller = controller;
 
   final SidebarXController _controller;
+  final user = Get.put(UserController());
 
   @override
   Widget build(BuildContext context) {
@@ -149,22 +147,24 @@ class SidebarMenu extends StatelessWidget {
           color: canvasColor,
         ),
       ),
-      footerDivider: divider,
+      footerDivider: Column(children: [
+        SignOutButton(),
+        Divider(),
+      ]),
       headerBuilder: (context, extended) {
-        return Text('Header');
-        // return Obx(
-        //   () {
-        //     return SizedBox(
-        //         height: 100,
-        //         child: Padding(
-        //             padding: EdgeInsets.all(16.0),
-        //             child: user.username.value != null
-        //                 ? Text(user.username.value,
-        //                     style: TextStyle(color: Colors.white))
-        //                 : Text('User', style: TextStyle(color: Colors.white))));
-        //     // child: Image.asset('assets/images/avatar.png'),
-        //   },
-        // );
+        // return Text('Header');
+
+        return Obx(() {
+          return SizedBox(
+              height: 100,
+              child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: user.username.value != null
+                      ? Text(user.email.value,
+                          style: TextStyle(color: Colors.white))
+                      : Text('User', style: TextStyle(color: Colors.white))));
+          // child: Image.asset('assets/images/avatar.png'),
+        });
       },
       items: [
         SidebarXItem(
