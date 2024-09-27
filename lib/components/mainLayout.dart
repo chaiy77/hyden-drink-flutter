@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
-import 'package:hydenflutter/stores/controller/userController.dart';
+// import 'package:hydenflutter/stores/controller/userController.dart';
 
 const primaryColor = Color(0xFF685BFF);
 const canvasColor = Color(0xFF2E2E48);
@@ -20,9 +20,8 @@ String _getTitleByIndex(int index) {
       return 'Manufacture';
     case 2:
       return 'Report';
-    case 2:
+    case 3:
       return 'Settings';
-
     default:
       return 'Not found page';
   }
@@ -89,12 +88,16 @@ class SidebarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Get.put(Usercontroller());
-    String url =
-        GoRouter.of(context).routerDelegate.currentConfiguration.fullPath;
-    // debugPrint("---------- Current Path -----------");
-    // debugPrint(url);
+    // final user = Get.put(Usercontroller());
+    // String url = GoRouter.of(context).routerDelegate.currentConfiguration.fullPath;
+    var url = ModalRoute.of(context)?.settings.name;
+    debugPrint("---------- Current Path -----------");
+    debugPrint(url.toString());
+    var r = ModalRoute.of(context);
+    debugPrint((r?.settings.name));
+
     // debugPrint(url.contains("pos").toString());
+    debugPrint("---------- -----------");
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
@@ -148,57 +151,64 @@ class SidebarMenu extends StatelessWidget {
       ),
       footerDivider: divider,
       headerBuilder: (context, extended) {
-        return Obx(
-          () {
-            return SizedBox(
-                height: 100,
-                child: Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: user.username.value != null
-                        ? Text(user.username.value,
-                            style: TextStyle(color: Colors.white))
-                        : Text('User', style: TextStyle(color: Colors.white))));
-            // child: Image.asset('assets/images/avatar.png'),
-          },
-        );
+        return Text('Header');
+        // return Obx(
+        //   () {
+        //     return SizedBox(
+        //         height: 100,
+        //         child: Padding(
+        //             padding: EdgeInsets.all(16.0),
+        //             child: user.username.value != null
+        //                 ? Text(user.username.value,
+        //                     style: TextStyle(color: Colors.white))
+        //                 : Text('User', style: TextStyle(color: Colors.white))));
+        //     // child: Image.asset('assets/images/avatar.png'),
+        //   },
+        // );
       },
       items: [
         SidebarXItem(
           icon: Icons.home,
           label: 'POS',
-          selectable: !url.contains("/pos"), //bool
+          // selectable: !url.contains("/pos"), //bool
+          selectable: url != "/pos", //bool
           onTap: () {
-            if (url.contains("/pos")) return null;
-            context.go('/pos');
+            // if (url.contains("/pos")) return null;
+            if (url == "/pos") return null;
+            Get.toNamed('/pos');
+            // context.go('/pos');
           },
         ),
 
         SidebarXItem(
           icon: Icons.settings,
           label: 'Manufacture',
-          selectable: !url.contains("/manufacture"), //bool
+          selectable: url != "/manufacture", //bool
           onTap: () {
-            if (url.contains("/manufacture")) return null;
-            context.go('/manufacture');
+            if (url == "/manufacture") return null;
+            // context.go('/manufacture');
+            Get.toNamed('/manufacture');
           },
         ),
         SidebarXItem(
           icon: Icons.settings,
           label: 'Report',
-          selectable: !url.contains("/report"), //bool
+          selectable: url != "/report", //bool
           onTap: () {
-            if (url.contains("/report")) return null;
-            context.go('/report');
+            if (url == "/report") return null;
+            // context.go('/report');
+            Get.toNamed('/report');
           },
         ),
 
         SidebarXItem(
           icon: Icons.settings,
           label: 'Settings',
-          selectable: !url.contains("/settings"), //bool
+          selectable: url != "/settings", //bool
           onTap: () {
-            if (url.contains("/setting")) return null;
-            context.go('/setting');
+            if (url == "/setting") return null;
+            // context.go('/setting');
+            Get.toNamed('/setting');
           },
         ),
         // const SidebarXItem(

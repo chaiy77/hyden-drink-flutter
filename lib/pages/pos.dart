@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hydenflutter/components/mainLayout.dart';
-import 'package:hydenflutter/views/pos/pos.dart';
+import 'package:hydenflutter/views/pos/posView.dart';
 
-class Pos extends StatefulWidget {
-  const Pos({super.key});
+class PosPage extends StatefulWidget {
+  const PosPage({super.key});
 
   @override
-  State<Pos> createState() => _PosState();
+  State<PosPage> createState() => _PosState();
 }
 
-class _PosState extends State<Pos> {
+class _PosState extends State<PosPage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(menuIndex: 0, body: POSView());
-    // return const SafeArea(child: Scaffold(body: Center(child: Text('Pos'))));
   }
 }

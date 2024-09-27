@@ -4,11 +4,12 @@ import 'package:hydenflutter/pages/login.dart';
 import 'package:hydenflutter/pages/setting.dart';
 import 'package:hydenflutter/pages/manufacture.dart';
 import 'package:hydenflutter/pages/report.dart';
+import 'package:hydenflutter/pages/verify.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
-import 'package:go_router/go_router.dart';
+// // import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'amplifyconfiguration.dart';
 
@@ -18,7 +19,7 @@ Future<void> main() async {
     usePathUrlStrategy();
     WidgetsFlutterBinding.ensureInitialized();
     await _configureAmplify();
-    runApp(const MyApp());
+    runApp(MyApp());
   } on AmplifyException catch (e) {
     runApp(Text("Error configuring Amplify: ${e.message}"));
   }
@@ -34,63 +35,62 @@ Future<void> _configureAmplify() async {
   }
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
+  MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
+//   // final _router = GoRouter(initialLocation: '/', routes: <RouteBase>[
+//   //   GoRoute(
+//   //       name: 'login',
+//   //       path: '/',
+//   //       builder: (BuildContext context, GoRouterState state) {
+//   //         return const LoginPage();
+//   //       }),
+//   //   GoRoute(
+//   //       name: 'pos',
+//   //       path: '/pos',
+//   //       builder: (BuildContext context, GoRouterState state) {
+//   //         return const Pos();
+//   //       }),
+//   //   GoRoute(
+//   //       name: 'setting',
+//   //       path: '/setting',
+//   //       builder: (BuildContext context, GoRouterState state) {
+//   //         return const SettingPage();
+//   //       }),
+//   //   GoRoute(
+//   //       name: 'manufacture',
+//   //       path: '/manufacture',
+//   //       builder: (BuildContext context, GoRouterState state) {
+//   //         return const ManufacturePage();
+//   //       }),
+//   //   GoRoute(
+//   //       name: 'report',
+//   //       path: '/report',
+//   //       builder: (BuildContext context, GoRouterState state) {
+//   //         return const ReportPage();
+//   //       })
+//   // ]);
+  final _router = [
+    GetPage(name: '/', page: () => const LoginPage()),
+    GetPage(name: '/pos', page: () => const PosPage()),
+    GetPage(name: '/manufacture', page: () => const ManufacturePage()),
+    GetPage(name: '/report', page: () => const ReportPage()),
+    GetPage(name: '/setting', page: () => const SettingPage()),
+    GetPage(name: '/verify', page: () => const VerifyPage())
+  ];
 
-class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  final _router = GoRouter(initialLocation: '/', routes: <RouteBase>[
-    GoRoute(
-        name: 'login',
-        path: '/',
-        builder: (BuildContext context, GoRouterState state) {
-          return const LoginPage();
-        }),
-    GoRoute(
-        name: 'pos',
-        path: '/pos',
-        builder: (BuildContext context, GoRouterState state) {
-          return const Pos();
-        }),
-    GoRoute(
-        name: 'setting',
-        path: '/setting',
-        builder: (BuildContext context, GoRouterState state) {
-          return const SettingPage();
-        }),
-    GoRoute(
-        name: 'manufacture',
-        path: '/manufacture',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ManufacturePage();
-        }),
-    GoRoute(
-        name: 'report',
-        path: '/report',
-        builder: (BuildContext context, GoRouterState state) {
-          return const ReportPage();
-        })
-  ]);
-
-  // This widget is the root of your application.
+// This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: _router
-        // initialRoute: '/',
-        // routes: {
-        //   '/': (context) => const LoginPage(),
-        //   '/home': (context) => const Home(),
-        //   '/setting': (context) => const SettingPage(),
-        // },
-        );
+    return GetMaterialApp(getPages: _router, initialRoute: '/');
+    // return MaterialApp.router(routerConfig: _router
+    // initialRoute: '/',
+    // routes: {
+    //   '/': (context) => const LoginPage(),
+    //   '/home': (context) => const Home(),
+    //   '/setting': (context) => const SettingPage(),
+    // },
+    //       // );
   }
 }
 

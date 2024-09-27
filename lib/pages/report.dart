@@ -1,6 +1,7 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hydenflutter/components/mainLayout.dart';
+import 'package:get/get.dart';
+import 'package:hydenflutter/stores/controller/userController.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -10,6 +11,8 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportState extends State<ReportPage> {
+  final user = Get.put(UserController());
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
