@@ -12,15 +12,19 @@ class UserController extends GetxController {
   var verified = false.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    safePrint('UserController -> OnInit()');
+    safePrint('UserController -> OnInit()  before getCurrentUser');
+    await getCurrentUser();
+    safePrint('UserController -> OnInit() after getCurrentUser');
   }
 
   @override
   void onReady() async {
     safePrint('UserController -> Ready()');
-    await getCurrentUser();
+    await fetchCurrentUserAttributes();
+
+    // await getCurrentUser();
     ever(isLoggedIn, _handleAuthStatus);
   }
 
@@ -35,27 +39,42 @@ class UserController extends GetxController {
   }
 
   Future<void> getCurrentUser() async {
+    safePrint('======== UserController -> getCurrentUser ========');
     // https://pub.dev/documentation/amplify_auth_cognito/latest/amplify_auth_cognito/AmplifyAuthCognito/getCurrentUser.html
     try {
+      // final result = await Amplify.Auth.getCurrentUser();
+
       final result = await Amplify.Auth.getCurrentUser();
       safePrint('user = ${result.userId}');
       id.value = result.userId;
-
-      final userAttr = await Amplify.Auth.fetchUserAttributes();
-      for (final e in userAttr) {
-        switch (e.userAttributeKey.toString()) {
-          case 'email':
-            email.value = e.value;
-        }
-      }
+      safePrint('id = $id');
 
       // username.value = result.signInDetails['username'];
       isLoggedIn.value = true;
+      safePrint('getCurrentUser -> isLoggedIn = ${isLoggedIn.toString()}');
 
       // return true;
     } on AuthException catch (e) {
       safePrint('Could not retrieve current user: ${e.message}');
       isLoggedIn.value = false;
+      safePrint('getCurrentUser -> isLoggedIn = ${isLoggedIn.toString()}');
+    }
+  }
+
+  Future<void> fetchCurrentUserAttributes() async {
+    safePrint('======== UserController -> fetchCurrentUserAttributes ========');
+    try {
+      final result = await Amplify.Auth.fetchUserAttributes();
+      safePrint('after get userAttributes');
+      for (final e in result) {
+        switch (e.userAttributeKey.toString()) {
+          case 'email':
+            email.value = e.value;
+        }
+      }
+      safePrint('getCurrentUser -> email = $email');
+    } on AuthException catch (e) {
+      safePrint('Error fetching user attributes: ${e.message}');
     }
   }
 
@@ -204,6 +223,7 @@ class UserController extends GetxController {
     final result = await Amplify.Auth.signOut();
     if (result is CognitoCompleteSignOut) {
       safePrint('Sign out completed successfully');
+      isLoggedIn.value = false;
       Get.offAllNamed('/');
     } else if (result is CognitoFailedSignOut) {
       safePrint('Error signing user out: ${result.exception.message}');

@@ -38,11 +38,28 @@ Future<void> _configureAmplify() async {
 }
 
 class AuthMiddleWare extends GetMiddleware {
+  final UserController user = Get.put(UserController());
+
+  @override
+  RouteSettings? redirect(String? route) {
+    debugPrint("============ AuthMiddleware ==========");
+    debugPrint('loggined = ${user.isLoggedIn.value.toString()}');
+    debugPrint('-----------------------------------------');
+    return !user.isLoggedIn.value ? const RouteSettings(name: '/') : null;
+  }
+}
+
+class LogginedMiddleware extends GetMiddleware {
   final user = Get.put(UserController());
 
   @override
-  RouteSettings? redirect(String? route) =>
-      !user.isLoggedIn.value ? const RouteSettings(name: '/') : null;
+  RouteSettings? redirect(String? route) {
+    debugPrint("============ LogginedMiddleware ==========");
+    debugPrint('loggined = ${user.isLoggedIn.value.toString()}');
+
+    debugPrint('-----------------------------------------');
+    return user.isLoggedIn.value ? const RouteSettings(name: '/pos') : null;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -81,7 +98,10 @@ class MyApp extends StatelessWidget {
 //   //       })
 //   // ]);
   final _router = [
-    GetPage(name: '/', page: () => const LoginPage()),
+    GetPage(
+        name: '/',
+        page: () => const LoginPage(),
+        middlewares: [LogginedMiddleware()]),
     GetPage(
         name: '/pos',
         page: () => const PosPage(),

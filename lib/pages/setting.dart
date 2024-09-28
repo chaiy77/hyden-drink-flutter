@@ -8,6 +8,8 @@ import 'package:hydenflutter/views/setting/inventory.dart';
 import 'package:hydenflutter/views/setting/product.dart';
 import 'package:hydenflutter/views/setting/supplier.dart';
 import 'package:hydenflutter/views/setting/transport.dart';
+import 'package:hydenflutter/views/setting/manufacture.dart';
+import 'package:hydenflutter/views/setting/iget.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -22,7 +24,7 @@ class _SettingState extends State<SettingPage> {
     return MainLayout(
         menuIndex: 3, // sidebar index
         body: DefaultTabController(
-          length: 6,
+          length: 8,
           child: Scaffold(
             appBar: AppBar(
               bottom: const TabBar(
@@ -32,19 +34,23 @@ class _SettingState extends State<SettingPage> {
                   Tab(child: Text('Employees')),
                   Tab(child: Text('Supliers')),
                   Tab(child: Text('Customers')),
+                  Tab(child: Text('Manufature')),
                   Tab(child: Text('Transport')),
+                  Tab(child: Text('IGET'))
                 ],
               ),
               title: Text('Setting'),
             ),
-            body: TabBarView(
+            body: const TabBarView(
               children: [
                 SettingCompany(),
                 SettingProduct(),
                 SettingEmployee(),
-                SettingCustomer(),
                 SettingSuplier(),
-                SettingTransport()
+                SettingCustomer(),
+                SettingManufacture(),
+                SettingTransport(),
+                SettingIget(),
               ],
             ),
           ),
