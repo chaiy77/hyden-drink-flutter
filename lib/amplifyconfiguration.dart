@@ -49,5 +49,17 @@ const amplifyconfig = '''{
                 }
             }
         }
+    },
+     "api": {
+    "plugins": {
+        "awsAPIPlugin": {
+            "HyDEN-AppSync": {
+                "endpointType": "GraphQL",
+                "endpoint": "https://imbmd64oozbtjgx7dyumcsnmdy.appsync-api.us-west-2.amazonaws.com/graphql",
+                "region": "us-west-2",
+                "authorizationType": "AWS_IAM"
+            }
+        }
     }
+  }
 }''';
