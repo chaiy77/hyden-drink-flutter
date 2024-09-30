@@ -51,14 +51,22 @@ class _LoginViewState extends State<LoginView> {
           email: usernameController.text, password: passwordController.text);
       if (user.isLoggedIn.value) {
         Get.offNamed('/pos');
+      } else {
+        Get.showSnackbar(const GetSnackBar(
+            title: 'LogIn',
+            message: 'Invalid username or password',
+            backgroundColor: Color.fromARGB(255, 222, 68, 66),
+            icon: Icon(Icons.refresh),
+            duration: Duration(seconds: 3)));
       }
+    } else {
+      Get.showSnackbar(const GetSnackBar(
+          title: 'LogIn',
+          message: 'Invalid username or password',
+          backgroundColor: Color.fromARGB(255, 222, 68, 66),
+          icon: Icon(Icons.refresh),
+          duration: Duration(seconds: 3)));
     }
-    Get.showSnackbar(const GetSnackBar(
-        title: 'LogIn',
-        message: 'Invalid username or password',
-        backgroundColor: Color.fromARGB(255, 222, 68, 66),
-        icon: Icon(Icons.refresh),
-        duration: Duration(seconds: 3)));
   }
 
   @override
