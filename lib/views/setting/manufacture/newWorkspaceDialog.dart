@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class NewMachineDialog extends StatefulWidget {
-  final Function onSaveNewMachine;
-  const NewMachineDialog({super.key, required this.onSaveNewMachine});
+class NewWorkspaceDialog extends StatefulWidget {
+  final Function onSaveNewWorkspace;
+  const NewWorkspaceDialog({super.key, required this.onSaveNewWorkspace});
 
   @override
-  State<NewMachineDialog> createState() => _NewMachineDialogState();
+  State<NewWorkspaceDialog> createState() => _NewWorkspaceDialogState();
 }
 
-class _NewMachineDialogState extends State<NewMachineDialog> {
+class _NewWorkspaceDialogState extends State<NewWorkspaceDialog> {
   bool? isProduct = false;
   bool? needMaterial = false;
   late TextEditingController _nameController;
@@ -170,7 +170,7 @@ class _NewMachineDialogState extends State<NewMachineDialog> {
                           child: FilledButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
-                                widget.onSaveNewMachine();
+                                widget.onSaveNewWorkspace();
                               },
                               child: Text('Save')))
                     ]))));

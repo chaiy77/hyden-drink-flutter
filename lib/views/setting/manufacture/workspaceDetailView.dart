@@ -3,14 +3,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hydenflutter/components/table/hdatatable.dart';
 import 'package:hydenflutter/views/setting/manufacture/addIgetDeviceDialog.dart';
 
-class MachineDetailView extends StatefulWidget {
-  const MachineDetailView({super.key});
+class WorkspaceDetailView extends StatefulWidget {
+  const WorkspaceDetailView({super.key});
 
   @override
-  State<MachineDetailView> createState() => _MachineDetailViewState();
+  State<WorkspaceDetailView> createState() => _WorkspaceDetailViewState();
 }
 
-class _MachineDetailViewState extends State<MachineDetailView> {
+class _WorkspaceDetailViewState extends State<WorkspaceDetailView> {
   void _addIgetDevice() {
     debugPrint('Add IGET Device');
   }
@@ -88,7 +88,7 @@ class _MachineDetailViewState extends State<MachineDetailView> {
                     child: Container(
                         color: Colors.blueGrey.withOpacity(0.5),
                         child: SvgPicture.asset(
-                          'images/image-missing.svg',
+                          'images/home2.svg',
                           width: 200,
                         ))),
                 Expanded(

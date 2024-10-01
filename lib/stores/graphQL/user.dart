@@ -1,5 +1,5 @@
-String getUserGraphQL = '''query getUser(\$userID: String!) {
-      getUser(userID:\$userID) {
+String getUserGraphQL = '''query getUser(\$userId: String!) {
+      getUser(userId:\$userId) {
         id
         email
         mobile

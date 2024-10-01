@@ -1,11 +1,18 @@
+import 'dart:convert';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
+import 'package:hydenflutter/stores/graphQL/user.dart';
 
 class UserController extends GetxController {
-  var username = 'Test'.obs;
+  var username = ''.obs;
   var id = ''.obs;
   var email = ''.obs;
+  var workplaceId = ''.obs;
+  var workplaceName = ''.obs;
+  var registerDate = 0.obs;
+  var status = ''.obs;
+  var type = ''.obs;
   var isLoggedIn = false.obs;
   var isWaiting = false.obs;
   var verified = false.obs;
@@ -21,8 +28,7 @@ class UserController extends GetxController {
   @override
   void onReady() async {
     safePrint('UserController -> Ready()');
-    await fetchCurrentUserAttributes();
-
+    // await fetchCurrentUserAttributes();
     // await getCurrentUser();
     ever(isLoggedIn, _handleAuthStatus);
   }
@@ -50,7 +56,8 @@ class UserController extends GetxController {
 
       // username.value = result.signInDetails['username'];
       isLoggedIn.value = true;
-      safePrint('getCurrentUser -> isLoggedIn = ${isLoggedIn.toString()}');
+      await setUserInfo();
+      //safePrint('getCurrentUser -> isLoggedIn = ${isLoggedIn.toString()}');
 
       // return true;
     } on AuthException catch (e) {
@@ -60,22 +67,22 @@ class UserController extends GetxController {
     }
   }
 
-  Future<void> fetchCurrentUserAttributes() async {
-    safePrint('======== UserController -> fetchCurrentUserAttributes ========');
-    try {
-      final result = await Amplify.Auth.fetchUserAttributes();
-      safePrint('after get userAttributes');
-      for (final e in result) {
-        switch (e.userAttributeKey.toString()) {
-          case 'email':
-            email.value = e.value;
-        }
-      }
-      safePrint('getCurrentUser -> email = $email');
-    } on AuthException catch (e) {
-      safePrint('Error fetching user attributes: ${e.message}');
-    }
-  }
+  // Future<void> fetchCurrentUserAttributes() async {
+  //   safePrint('======== UserController -> fetchCurrentUserAttributes ========');
+  //   try {
+  //     final result = await Amplify.Auth.fetchUserAttributes();
+  //     safePrint('after get userAttributes');
+  //     for (final e in result) {
+  //       switch (e.userAttributeKey.toString()) {
+  //         case 'email':
+  //           email.value = e.value;
+  //       }
+  //     }
+  //     safePrint('getCurrentUser -> email = $email');
+  //   } on AuthException catch (e) {
+  //     safePrint('Error fetching user attributes: ${e.message}');
+  //   }
+  // }
 
   Future<bool> register({
     required String email,
@@ -213,6 +220,7 @@ class UserController extends GetxController {
         break;
       case AuthSignInStep.done:
         safePrint('Sign in is complete');
+        await getCurrentUser();
         break;
     }
   }
@@ -229,7 +237,32 @@ class UserController extends GetxController {
     }
   }
 
-  void setUserName(String name) {
-    username.value = name;
+  Future<void> setUserInfo() async {
+    safePrint('================= userController-> setUserInfo ========= ');
+    safePrint('id = ${id.value}');
+    try {
+      safePrint('---- before query ------');
+      final query = await Amplify.API
+          .query(
+            request: GraphQLRequest<String>(
+                document: getUserGraphQL, variables: {'userId': id.value}),
+          )
+          .response;
+      safePrint('---- after query ------');
+      // final result = await query.response;
+      final data = query.data;
+      safePrint(data);
+      if (data != null) {
+        Map jsonData = (json.decode(data) as Map).cast<String, Object?>();
+        email.value = jsonData['getUser']['email'];
+        username.value = jsonData['getUser']['email'];
+        registerDate.value = jsonData['getUser']['registerDate'];
+        type.value = jsonData['getUser']['type'];
+        status.value = jsonData['getUser']['status'];
+      }
+    } on ApiException catch (e) {
+      safePrint('Query user failed $e');
+    }
+    safePrint('---------------------------------------- ');
   }
 }

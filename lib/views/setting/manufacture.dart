@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hydenflutter/views/setting/manufacture/newMachineDialog.dart';
-import 'package:hydenflutter/views/setting/manufacture/machineDetailView.dart';
+import 'package:hydenflutter/views/setting/manufacture/newWorkspaceDialog.dart';
+import 'package:hydenflutter/views/setting/manufacture/workspaceDetailView.dart';
 import 'package:hydenflutter/views/setting/manufacture/addIgetDeviceDialog.dart';
 
 class SettingManufacture extends StatefulWidget {
@@ -11,15 +11,15 @@ class SettingManufacture extends StatefulWidget {
 }
 
 class _SettingManufactureState extends State<SettingManufacture> {
-  Future<void> _afterSaveNewMachine() async {
+  Future<void> _handleSaveNewWorkspace() async {
     debugPrint('After save New machine');
   }
 
   Future<void> _clickNewMachine(BuildContext context) async {
     return await showDialog(
         context: context,
-        builder: (context) => NewMachineDialog(
-              onSaveNewMachine: _afterSaveNewMachine,
+        builder: (context) => NewWorkspaceDialog(
+              onSaveNewWorkspace: _handleSaveNewWorkspace,
             ));
   }
 
@@ -59,7 +59,7 @@ class _SettingManufactureState extends State<SettingManufacture> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               for (int i = 0; i < 2; i++) ...[
-                MachineDetailView(),
+                WorkspaceDetailView(),
                 Divider(thickness: 2, color: Colors.grey.withOpacity(0.4)),
               ]
             ],
