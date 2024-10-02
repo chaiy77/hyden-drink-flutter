@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hydenflutter/components/mainLayout.dart';
-import 'package:hydenflutter/views/setting/company.dart';
+import 'package:hydenflutter/views/setting/business.dart';
 import 'package:hydenflutter/views/setting/customer.dart';
 import 'package:hydenflutter/views/setting/employee.dart';
 import 'package:hydenflutter/views/setting/inventory.dart';
@@ -43,7 +43,7 @@ class _SettingState extends State<SettingPage> {
             ),
             body: const TabBarView(
               children: [
-                SettingCompany(),
+                SettingBusiness(),
                 SettingProduct(),
                 SettingEmployee(),
                 SettingSuplier(),

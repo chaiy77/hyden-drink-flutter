@@ -256,9 +256,9 @@ class UserController extends GetxController {
         Map jsonData = (json.decode(data) as Map).cast<String, Object?>();
         email.value = jsonData['getUser']['email'];
         username.value = jsonData['getUser']['email'];
-        registerDate.value = jsonData['getUser']['registerDate'];
-        type.value = jsonData['getUser']['type'];
-        status.value = jsonData['getUser']['status'];
+        registerDate.value = jsonData['getUser']['registerDate'] ?? 0;
+        type.value = jsonData['getUser']['type'] ?? '';
+        status.value = jsonData['getUser']['status'] ?? '';
       }
     } on ApiException catch (e) {
       safePrint('Query user failed $e');

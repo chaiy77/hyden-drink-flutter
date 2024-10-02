@@ -15,7 +15,7 @@ class _SettingManufactureState extends State<SettingManufacture> {
     debugPrint('After save New machine');
   }
 
-  Future<void> _clickNewMachine(BuildContext context) async {
+  Future<void> _clickNewWorkspace(BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) => NewWorkspaceDialog(
@@ -73,7 +73,7 @@ class _SettingManufactureState extends State<SettingManufacture> {
                     onPressed: () async {
                       debugPrint('click new Machine');
 
-                      await _clickNewMachine(context);
+                      await _clickNewWorkspace(context);
                     },
                   )))
         ]));

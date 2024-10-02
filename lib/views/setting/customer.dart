@@ -1,6 +1,7 @@
+import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:hydenflutter/views/setting/customer/addNewCustomerView.dart';
+import 'package:hydenflutter/views/setting/customer/addNewCustomerDialog.dart';
 import 'package:hydenflutter/views/setting/customer/customerSearchView.dart';
 import 'package:hydenflutter/views/setting/customer/customerDetialView.dart';
 
@@ -13,6 +14,19 @@ class SettingCustomer extends StatefulWidget {
 
 class _SettingCustomerState extends State<SettingCustomer> {
   String selectedCustID = '';
+
+  Future<void> _handleSaveNewCustomer() async {
+    safePrint('_handleSaveNewWorkspace');
+  }
+
+  Future<void> _clickNewCustomer(BuildContext context) async {
+    safePrint('_clickNewWorkspace');
+    return await showDialog(
+        context: context,
+        builder: (context) => NewCustomerDialog(
+              onSaveNewCustomer: _handleSaveNewCustomer,
+            ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +76,9 @@ class _SettingCustomerState extends State<SettingCustomer> {
             child: Align(
                 alignment: FractionalOffset.bottomRight,
                 child: FilledButton(
-                  child: Text('New Customer'),
+                  child: const Text('New Customer'),
                   onPressed: () {
-                    debugPrint('click new Customer');
+                    _clickNewCustomer(context);
                   },
                 )))
       ],
