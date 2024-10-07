@@ -16,6 +16,9 @@ class ProductSearchView extends StatefulWidget {
 }
 
 class _ProductSearchViewState extends State<ProductSearchView> {
+  final ScrollController _horizontal = ScrollController(),
+      _vertical = ScrollController();
+
   void viewDetailClick(id) {
     // debugPrint('click $id');
     // debugPrint(mock.toString());
@@ -26,39 +29,56 @@ class _ProductSearchViewState extends State<ProductSearchView> {
 
   @override
   Widget build(BuildContext context) {
+    var screenSize = MediaQuery.of(context).size;
+    var h = screenSize.height;
     return Column(
       children: [
-        const Text('Search Prtoduct '),
-        Padding(
-            padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
-            child: Row(children: [
-              const Expanded(
-                  flex: 2,
-                  child: TextField(
-                      decoration: InputDecoration(
-                          hintText: 'Prtoduct name',
-                          border: OutlineInputBorder()))),
-              SizedBox(
-                  width: 160,
-                  child: Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                          padding: EdgeInsets.only(right: 10),
-                          child: FilledButton(
-                            child: Text('search'),
-                            onPressed: () {
-                              debugPrint('clicked');
-                            },
-                          ))))
-            ])),
-        Padding(
-            padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+        SizedBox(height: 20, child: const Text('Search Prtoduct ')),
+        SizedBox(
+            height: 100,
             child: Container(
-                width: double.infinity,
-                color: Colors.grey.withOpacity(0.2),
-                child: SearchResultTable(callbackFunction: (data) {
-                  viewDetailClick(data);
-                })))
+                child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 5, 10, 5),
+                    child: Row(children: [
+                      const Expanded(
+                          flex: 2,
+                          child: TextField(
+                              decoration: InputDecoration(
+                                  hintText: 'Prtoduct name',
+                                  border: OutlineInputBorder()))),
+                      SizedBox(
+                          width: 160,
+                          child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: FilledButton(
+                                    child: Text('search'),
+                                    onPressed: () {
+                                      debugPrint('clicked');
+                                    },
+                                  ))))
+                    ])))),
+        SizedBox(
+            height: h * 0.55,
+            child: Scrollbar(
+                thumbVisibility: true,
+                trackVisibility: true,
+                controller: _vertical,
+                child: Scrollbar(
+                    thumbVisibility: true,
+                    trackVisibility: true,
+                    controller: _horizontal,
+                    notificationPredicate: (notif) => notif.depth == 1,
+                    child: SingleChildScrollView(
+                        controller: _vertical,
+                        scrollDirection: Axis.vertical,
+                        child: SingleChildScrollView(
+                            controller: _horizontal,
+                            scrollDirection: Axis.horizontal,
+                            child: SearchResultTable(callbackFunction: (data) {
+                              viewDetailClick(data);
+                            })))))),
       ],
     );
   }

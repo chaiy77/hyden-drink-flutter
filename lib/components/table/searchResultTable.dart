@@ -8,7 +8,13 @@ class SearchResultTable extends StatefulWidget {
   final List tempData = [
     {'id': '1234', 'name': 'A', 'test': 'AA'},
     {'id': '2345', 'name': 'B', 'test': 'BB'},
-    {'id': '3456', 'name': 'C', 'test': 'CC'}
+    {'id': '3456', 'name': 'C', 'test': 'CC'},
+    {'id': '1234', 'name': 'A', 'test': 'AAA'},
+    {'id': '2345', 'name': 'B', 'test': 'BBB'},
+    {'id': '3456', 'name': 'C', 'test': 'CCC'},
+    {'id': '1234', 'name': 'A', 'test': 'AAAA'},
+    {'id': '2345', 'name': 'B', 'test': 'BBBB'},
+    {'id': '3456', 'name': 'C', 'test': 'CCCC'}
   ];
 
   final Function(String)? callbackFunction;

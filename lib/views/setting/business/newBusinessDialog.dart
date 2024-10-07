@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:hydenflutter/stores/controller/workplaceController.dart';
 
 class NewBusinessDialog extends StatefulWidget {
   final Function onSaveNewBusiness;
-  const NewBusinessDialog({super.key, required this.onSaveNewBusiness});
+  final bool edit;
+  const NewBusinessDialog(
+      {super.key, required this.onSaveNewBusiness, required this.edit});
 
   @override
   State<NewBusinessDialog> createState() => _NewBusinessDialogState();
@@ -15,6 +19,8 @@ class _NewBusinessDialogState extends State<NewBusinessDialog> {
   late TextEditingController _zipcodeController;
   late TextEditingController _telController;
 
+  final workplace = Get.put(WorkplaceController());
+
   bool _nameValidate = false;
 
   @override
@@ -25,6 +31,13 @@ class _NewBusinessDialogState extends State<NewBusinessDialog> {
     _nameController = TextEditingController();
     _zipcodeController = TextEditingController();
     _telController = TextEditingController();
+
+    if (widget.edit) {
+      _addressController.text = workplace.address.value;
+      _nameController.text = workplace.name.value;
+      _zipcodeController.text = workplace.zipcode.value;
+      _telController.text = workplace.telephone.value;
+    }
   }
 
   void _clickSaveBusiness() {

@@ -20,9 +20,8 @@ class UserController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    safePrint('UserController -> OnInit()  before getCurrentUser');
+    safePrint('UserController -> OnInit()');
     await getCurrentUser();
-    safePrint('UserController -> OnInit() after getCurrentUser');
   }
 
   @override
@@ -241,17 +240,16 @@ class UserController extends GetxController {
     safePrint('================= userController-> setUserInfo ========= ');
     safePrint('id = ${id.value}');
     try {
-      safePrint('---- before query ------');
       final query = await Amplify.API
           .query(
             request: GraphQLRequest<String>(
                 document: getUserGraphQL, variables: {'userId': id.value}),
           )
           .response;
-      safePrint('---- after query ------');
+
       // final result = await query.response;
       final data = query.data;
-      safePrint(data);
+      safePrint('setUserInfo result = $data');
       if (data != null) {
         Map jsonData = (json.decode(data) as Map).cast<String, Object?>();
         email.value = jsonData['getUser']['email'];

@@ -4,6 +4,7 @@ import 'package:sidebarx/sidebarx.dart';
 import 'package:get/get.dart';
 import 'package:hydenflutter/stores/controller/userController.dart';
 import 'package:hydenflutter/components/signOutButton.dart';
+import 'package:hydenflutter/stores/controller/workplaceController.dart';
 
 const primaryColor = Color(0xFF685BFF);
 const canvasColor = Color(0xFF2E2E48);
@@ -34,6 +35,7 @@ class MainLayout extends StatelessWidget {
   final int menuIndex;
   final _key = GlobalKey<ScaffoldState>();
   final user = Get.put(UserController());
+  final workplace = Get.put(WorkplaceController());
 
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
 

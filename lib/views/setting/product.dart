@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 // import 'package:hydenflutter/views/setting/Prtoduct/addNewPrtoductView.dart';
 import 'package:hydenflutter/views/setting/product/productSearchView.dart';
 import 'package:hydenflutter/views/setting/product/productDetailView.dart';
+import 'package:hydenflutter/views/setting/product/newProductDialog.dart';
 
 class SettingProduct extends StatefulWidget {
   const SettingProduct({super.key});
@@ -13,6 +14,29 @@ class SettingProduct extends StatefulWidget {
 
 class _SettingProductState extends State<SettingProduct> {
   String selectedCustID = '';
+
+  bool _edit = false;
+
+  @override
+  void initState() {
+    // debugPrint('PrtoductDetialView -> initState()');
+    super.initState();
+  }
+
+  Future<void> _clickSaveProduct(var value) async {
+    debugPrint('click _onSaveProductInfo = ${value.toString()}');
+  }
+
+  Future<void> _clickNewProduct(context) async {
+    await showDialog(
+        context: context,
+        builder: (context) => NewProductDialog(
+            onSaveProduct: (value) => _clickSaveProduct(value), edit: _edit));
+
+    setState(() {
+      _edit = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +89,7 @@ class _SettingProductState extends State<SettingProduct> {
                   child: Text('New Prtoduct'),
                   onPressed: () {
                     debugPrint('click new Prtoduct');
+                    _clickNewProduct(context);
                   },
                 )))
       ],
