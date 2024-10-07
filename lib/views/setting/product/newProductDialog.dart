@@ -27,7 +27,7 @@ class _NewProductDialogState extends State<NewProductDialog> {
   final workplace = Get.put(WorkplaceController());
 
   bool _nameValidate = false;
-  bool _cutomeSku = false;
+  bool _customSku = false;
 
   @override
   void initState() {
@@ -40,25 +40,13 @@ class _NewProductDialogState extends State<NewProductDialog> {
     _priceController = TextEditingController();
 
     String _lastSku = generateSKU(workplace.lastAutoSku.value);
+    _skuController.text = _lastSku;
+  }
 
-    // if(_lastSku.isEmpty){
-
-    //   _lastSku = 'A-00001';
-    // }else{
-    // String _c = _lastSku.split("-")[0];
-    // int _i = int.parse(_lastSku.split("-")[1].toString());
-
-    // while
-
-    // }
-    debugPrint('last SKU = $_lastSku');
-
-    // if (widget.edit) {
-    //   _addressController.text = workplace.address.value;
-    //   _nameController.text = workplace.name.value;
-    //   _zipcodeController.text = workplace.zipcode.value;
-    //   _telController.text = workplace.telephone.value;
-    // }
+  void _setCustomSKU() {
+    setState(() {
+      _customSku = !_customSku;
+    });
   }
 
   void _clickSaveProduct() {
@@ -143,25 +131,46 @@ class _NewProductDialogState extends State<NewProductDialog> {
                                                 const Expanded(
                                                     flex: 1, child: Text('')),
                                               ]),
-                                          // Row(
-                                          //     crossAxisAlignment:
-                                          //         CrossAxisAlignment.end,
-                                          //     children: [
-                                          //       const Expanded(
-                                          //           flex: 2,
-                                          //           child: Text('Address')),
-                                          //       Expanded(
-                                          //           flex: 3,
-                                          //           child: TextField(
-                                          //             textAlignVertical:
-                                          //                 const TextAlignVertical(
-                                          //                     y: 0),
-                                          //             controller:
-                                          //                 _addressController,
-                                          //           )),
-                                          //       const Expanded(
-                                          //           flex: 1, child: Text('')),
-                                          //     ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2,
+                                                    child: Text('SKU')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: TextField(
+                                                      enabled: _customSku,
+                                                      textAlignVertical:
+                                                          const TextAlignVertical(
+                                                              y: 0),
+                                                      controller:
+                                                          _skuController,
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Checkbox(
+                                                                  value:
+                                                                      _customSku,
+                                                                  onChanged:
+                                                                      (bool?
+                                                                          value) {
+                                                                    _setCustomSKU();
+                                                                  })),
+                                                          const Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                  'auto ')),
+                                                        ]))
+                                              ]),
                                           // Row(
                                           //     crossAxisAlignment:
                                           //         CrossAxisAlignment.end,
