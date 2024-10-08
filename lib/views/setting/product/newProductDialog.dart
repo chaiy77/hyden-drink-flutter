@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:hydenflutter/stores/controller/workplaceController.dart';
 import 'package:hydenflutter/utils/tools.dart';
 
@@ -21,13 +22,15 @@ class _NewProductDialogState extends State<NewProductDialog> {
   late TextEditingController _skuController;
   late TextEditingController _unitController;
   late TextEditingController _priceController;
-  late String _type;
+  String? _type;
   late Map<String, String> _subUnit;
 
   final workplace = Get.put(WorkplaceController());
 
   bool _nameValidate = false;
   bool _customSku = false;
+
+  final List<String> productTypes = ['Product', 'Material'];
 
   @override
   void initState() {
@@ -40,6 +43,7 @@ class _NewProductDialogState extends State<NewProductDialog> {
     _priceController = TextEditingController();
 
     String _lastSku = generateSKU(workplace.lastAutoSku.value);
+
     _skuController.text = _lastSku;
   }
 
@@ -50,22 +54,31 @@ class _NewProductDialogState extends State<NewProductDialog> {
   }
 
   void _clickSaveProduct() {
-    Navigator.of(context).pop();
-    widget.onSaveProduct('testProduct');
+    // Navigator.of(context).pop();
 
-    // setState(() {
-    //   _nameValidate = _nameController.text.isEmpty;
-    // });
+    final name = _nameController.text;
+    final sku = _skuController.text;
+    final type = _type;
+    final unit = _unitController.text;
+    final price = _priceController.text;
 
-    // if (_nameController.text.isNotEmpty) {
-    //   Navigator.of(context).pop();
-    //   widget.onSaveNewBusonSaveProductiness({
-    //     'name': _nameController.text,
-    //     'address': _addressController.text,
-    //     'zipcode': _zipcodeController.text,
-    //     'telephone': _telController.text
-    //   });
-    // }
+    if (type != null) {
+      if (name.isNotEmpty &&
+          sku.isNotEmpty &&
+          type.isNotEmpty &&
+          unit.isNotEmpty &&
+          price.isNotEmpty &&
+          price.isNum) {
+        Navigator.of(context).pop();
+        widget.onSaveProduct({
+          'name': name,
+          'sku': sku,
+          'type': type,
+          'unit': unit,
+          'price': double.parse(price)
+        });
+      }
+    }
   }
 
   @override
@@ -74,7 +87,7 @@ class _NewProductDialogState extends State<NewProductDialog> {
         child: SizedBox(
             width: 800,
             child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                 child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -89,10 +102,16 @@ class _NewProductDialogState extends State<NewProductDialog> {
                           children: [
                             Expanded(
                                 flex: 3,
-                                child: SvgPicture.asset(
-                                  'images/home2.svg',
-                                  width: 200,
-                                )),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'images/home2.svg',
+                                        width: 200,
+                                      ),
+                                    ])),
                             Expanded(
                                 flex: 3,
                                 child: Padding(
@@ -107,6 +126,8 @@ class _NewProductDialogState extends State<NewProductDialog> {
                                           Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 const Expanded(
                                                     flex: 2,
@@ -134,6 +155,8 @@ class _NewProductDialogState extends State<NewProductDialog> {
                                           Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
                                               children: [
                                                 const Expanded(
                                                     flex: 2,
@@ -153,7 +176,10 @@ class _NewProductDialogState extends State<NewProductDialog> {
                                                     child: Row(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
-                                                                .center,
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
                                                           Expanded(
                                                               flex: 1,
@@ -171,44 +197,83 @@ class _NewProductDialogState extends State<NewProductDialog> {
                                                                   'auto ')),
                                                         ]))
                                               ]),
-                                          // Row(
-                                          //     crossAxisAlignment:
-                                          //         CrossAxisAlignment.end,
-                                          //     children: [
-                                          //       const Expanded(
-                                          //           flex: 2,
-                                          //           child: Text('Zipcode')),
-                                          //       Expanded(
-                                          //           flex: 3,
-                                          //           child: TextField(
-                                          //             textAlignVertical:
-                                          //                 const TextAlignVertical(
-                                          //                     y: 0),
-                                          //             controller:
-                                          //                 _zipcodeController,
-                                          //           )),
-                                          //       const Expanded(
-                                          //           flex: 1, child: Text('')),
-                                          //     ]),
-                                          // Row(
-                                          //     crossAxisAlignment:
-                                          //         CrossAxisAlignment.end,
-                                          //     children: [
-                                          //       const Expanded(
-                                          //           flex: 2,
-                                          //           child: Text('Telephone')),
-                                          //       Expanded(
-                                          //           flex: 3,
-                                          //           child: TextField(
-                                          //             textAlignVertical:
-                                          //                 const TextAlignVertical(
-                                          //                     y: 0),
-                                          //             controller:
-                                          //                 _telController,
-                                          //           )),
-                                          //       const Expanded(
-                                          //           flex: 1, child: Text('')),
-                                          //     ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2,
+                                                    child: Text('Type')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child:
+                                                        DropdownButtonHideUnderline(
+                                                            child:
+                                                                DropdownButton2<
+                                                                    String>(
+                                                      items: productTypes
+                                                          .map((String item) {
+                                                        return DropdownMenuItem<
+                                                                String>(
+                                                            value: item,
+                                                            child: Text(item));
+                                                      }).toList(),
+                                                      value: _type,
+                                                      onChanged:
+                                                          (String? value) {
+                                                        debugPrint(value);
+                                                        setState(() {
+                                                          _type = value;
+                                                        });
+                                                      },
+                                                    ))),
+                                                const Expanded(
+                                                    flex: 1, child: Text('')),
+                                              ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2,
+                                                    child: Text('Count Unit')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: TextField(
+                                                      textAlignVertical:
+                                                          const TextAlignVertical(
+                                                              y: 0),
+                                                      controller:
+                                                          _unitController,
+                                                    )),
+                                                const Expanded(
+                                                    flex: 1, child: Text('')),
+                                              ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2,
+                                                    child: Text('Price/Unit')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: TextField(
+                                                      textAlignVertical:
+                                                          const TextAlignVertical(
+                                                              y: 0),
+                                                      controller:
+                                                          _priceController,
+                                                    )),
+                                                const Expanded(
+                                                    flex: 1, child: Text('')),
+                                              ]),
                                         ])))
                           ]),
                       Padding(

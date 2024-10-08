@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:hydenflutter/views/setting/Prtoduct/addNewPrtoductView.dart';
+import 'package:get/get.dart';
 import 'package:hydenflutter/views/setting/product/productSearchView.dart';
 import 'package:hydenflutter/views/setting/product/productDetailView.dart';
 import 'package:hydenflutter/views/setting/product/newProductDialog.dart';
+import 'package:hydenflutter/stores/controller/productController.dart';
 
 class SettingProduct extends StatefulWidget {
   const SettingProduct({super.key});
@@ -14,17 +15,32 @@ class SettingProduct extends StatefulWidget {
 
 class _SettingProductState extends State<SettingProduct> {
   String selectedCustID = '';
-
   bool _edit = false;
+
+  final productController = Get.put(ProductController());
 
   @override
   void initState() {
     // debugPrint('PrtoductDetialView -> initState()');
+
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // perform post-frame initialization here
+      await productController.getAllProductList();
+      debugPrint('pProduct List = ${productController.productList.toString()}');
+    });
   }
 
-  Future<void> _clickSaveProduct(var value) async {
+  Future<void> _clickSaveProduct(value) async {
     debugPrint('click _onSaveProductInfo = ${value.toString()}');
+    await productController.createProduct(
+        sku: value['sku'],
+        name: value['name'],
+        type: value['type'],
+        unit: value['unit'],
+        price: value['price'],
+        remark: "",
+        edit: false);
   }
 
   Future<void> _clickNewProduct(context) async {

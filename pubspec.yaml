@@ -45,6 +45,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_feather_icons: ^2.0.0+1
   amplify_api: ^2.4.1
+  dropdown_button2: ^2.3.9
 dev_dependencies:
   flutter_test:
     sdk: flutter
