@@ -14,7 +14,7 @@ class SettingProduct extends StatefulWidget {
 }
 
 class _SettingProductState extends State<SettingProduct> {
-  String selectedCustID = '';
+  String selectedProductID = '';
   bool _edit = false;
 
   final productController = Get.put(ProductController());
@@ -75,9 +75,11 @@ class _SettingProductState extends State<SettingProduct> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                          ProductSearchView(selectCustID: (data) {
+                          ProductSearchView(selectProductID: (data) {
+                            debugPrint(
+                                'select product sku = ${data.toString()}');
                             setState(() {
-                              selectedCustID = data.toString();
+                              selectedProductID = data.toString();
                             });
                           })
                         ])))),
@@ -94,7 +96,7 @@ class _SettingProductState extends State<SettingProduct> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                          ProductDetailView(custID: selectedCustID)
+                          ProductDetailView(productID: selectedProductID)
                         ]))))
           ],
         )),

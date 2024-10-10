@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hydenflutter/utils/tools.dart';
 
 class HDataTable extends StatefulWidget {
-  final List? data;
+  final List data;
   // final List tempDataHeader = ['no', 'name', 'test'];
   final List tempData = [
     {'name': 'A', 'test': 'AA'},
@@ -23,7 +23,8 @@ class _HDataTableState extends State<HDataTable> {
 
   List<DataColumn> _headerLabel() {
     List<DataColumn> header = [];
-    if (widget.tempData.isNotEmpty) {
+    // if (widget.tempData.isNotEmpty) {
+    if (widget.data.isNotEmpty) {
       headerData = widget.tempData[0].keys.toList();
       debugPrint(headerData.toString());
       DataColumn tempHeader = const DataColumn(
@@ -50,7 +51,8 @@ class _HDataTableState extends State<HDataTable> {
 
   List<DataRow> _rowData() {
     List<DataRow> dataRow = [];
-    if (widget.tempData.isNotEmpty) {
+    // if (widget.tempData.isNotEmpty) {
+    if (widget.data.isNotEmpty) {
       for (int i = 0; i < widget.tempData.length; i++) {
         List<DataCell> cellData = [];
         cellData.add(DataCell(Text((i + 1).toString())));

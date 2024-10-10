@@ -1,11 +1,11 @@
-import 'dart:convert';
+// ignore_for_file: file_names
 
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:hydenflutter/stores/graphQL/product.dart';
 import 'package:hydenflutter/stores/controller/userController.dart';
 import 'package:hydenflutter/stores/controller/workplaceController.dart';
-import 'package:hydenflutter/stores/graphQL/product.dart';
 
 class ProductController extends GetxController {
   final user = Get.find<UserController>();
@@ -91,7 +91,36 @@ class ProductController extends GetxController {
         productList.value = list;
       }
     } on ApiException catch (e) {
-      safePrint('Query user failed $e');
+      safePrint('Query getAllProductList failed $e');
     }
+  }
+
+  Future<Map> getProductInfo(prodId) async {
+    safePrint(' ----  getProductInfo -> --// ');
+    final workplaceId = workplace.id.value;
+    prodId = "A-00001";
+    safePrint(' ----  workplaceId = $workplaceId , prodId = $prodId ');
+    try {
+      final query = await Amplify.API
+          .query(
+            request: GraphQLRequest<String>(
+                document: getProductInfoGraphQL,
+                variables: {"workplaceId": workplaceId, "id": prodId}),
+          )
+          .response;
+      // final result = await query.response;
+      final data = query.data;
+      safePrint('getAllProductList result ${data.toString()}');
+      if (data != null) {
+        Map jsonData = (json.decode(data) as Map).cast<String, dynamic>();
+        final _product = jsonData['getProductInfo'];
+        safePrint('product Info = ${_product.toString()}');
+        // await Future.delayed(Duration(seconds: 5));
+        return _product;
+      }
+    } on ApiException catch (e) {
+      safePrint('Query getProductInfo failed $e');
+    }
+    return {};
   }
 }// end of class ProductController

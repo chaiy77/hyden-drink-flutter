@@ -6,18 +6,18 @@ class SearchResultTable extends StatefulWidget {
   final List? data;
   // final List tempDataHeader = ['no', 'name', 'test'];
   final List tempData = [
-    {'id': '1234', 'name': 'A', 'test': 'AA'},
-    {'id': '2345', 'name': 'B', 'test': 'BB'},
-    {'id': '3456', 'name': 'C', 'test': 'CC'},
-    {'id': '1234', 'name': 'A', 'test': 'AAA'},
-    {'id': '2345', 'name': 'B', 'test': 'BBB'},
-    {'id': '3456', 'name': 'C', 'test': 'CCC'},
-    {'id': '1234', 'name': 'A', 'test': 'AAAA'},
-    {'id': '2345', 'name': 'B', 'test': 'BBBB'},
-    {'id': '3456', 'name': 'C', 'test': 'CCCC'}
+    // {'id': '1234', 'name': 'A', 'test': 'AA'},
+    // {'id': '2345', 'name': 'B', 'test': 'BB'},
+    // {'id': '3456', 'name': 'C', 'test': 'CC'},
+    // {'id': '1234', 'name': 'A', 'test': 'AAA'},
+    // {'id': '2345', 'name': 'B', 'test': 'BBB'},
+    // {'id': '3456', 'name': 'C', 'test': 'CCC'},
+    // {'id': '1234', 'name': 'A', 'test': 'AAAA'},
+    // {'id': '2345', 'name': 'B', 'test': 'BBBB'},
+    // {'id': '3456', 'name': 'C', 'test': 'CCCC'}
   ];
 
-  final Function(String)? callbackFunction;
+  final Function? callbackFunction;
   SearchResultTable({super.key, this.data = const [], this.callbackFunction});
   @override
   State<SearchResultTable> createState() => _SearchResultTableState();
@@ -33,9 +33,12 @@ class _SearchResultTableState extends State<SearchResultTable> {
 
   List<DataColumn> _headerLabel() {
     List<DataColumn> header = [];
-    if (widget.tempData.isNotEmpty) {
-      headerData = widget.tempData[0].keys.toList();
-      debugPrint(headerData.toString());
+    // final _data = widget.data!.isNotEmpty ? widget.data : widget.tempData;
+    final _data = widget.data;
+    // debugPrint('Column Data in not null , ${_data.toString()}');
+    if (_data!.isNotEmpty) {
+      headerData = _data[0].keys.toList();
+      // debugPrint(headerData.toString());
       DataColumn tempHeader = const DataColumn(
           label: Expanded(
               child:
@@ -65,21 +68,24 @@ class _SearchResultTableState extends State<SearchResultTable> {
 
   List<DataRow> _rowData() {
     List<DataRow> dataRow = [];
-    if (widget.tempData.isNotEmpty) {
-      for (int i = 0; i < widget.tempData.length; i++) {
+    // final _data = widget.data!.isNotEmpty ? widget.data : widget.tempData;
+    final _data = widget.data;
+    // debugPrint('Row Data in not null , ${_data.toString()}');
+    if (_data!.isNotEmpty) {
+      for (int i = 0; i < _data.length; i++) {
         List<DataCell> cellData = [];
         //Add index
         cellData.add(DataCell(Text((i + 1).toString())));
 
         //Add Data
         for (int j = 0; j < headerData.length; j++) {
-          cellData.add(DataCell(Text(widget.tempData[i][headerData[j]])));
+          cellData.add(DataCell(Text(_data[i][headerData[j]].toString())));
         }
         if (widget.callbackFunction != null) {
           cellData
               .add(DataCell(const Icon(Icons.open_in_new_outlined), onTap: () {
-            debugPrint(widget.tempData[i]['id'].toString());
-            widget.callbackFunction!(widget.tempData[i]['id']);
+            // debugPrint(_data[i]['id'].toString());
+            widget.callbackFunction!(_data[i]);
           }));
         }
 
