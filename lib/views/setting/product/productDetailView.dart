@@ -165,7 +165,9 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       //   _isWating = true;
       // });
 
-      return ProductDetailWidget(context);
+      return Obx(() {
+        return ProductDetailWidget(context);
+      });
     }
   }
 }

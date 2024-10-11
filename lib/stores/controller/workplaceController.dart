@@ -19,8 +19,12 @@ class WorkplaceController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    safePrint('WorkplaceController -> OnInit()');
-    await getWorkplaceInfo();
+    safePrint('============= WorkplaceController -> OnInit() ======== ');
+    safePrint('workplaceID = ${id.value}');
+    safePrint('--------------------------------------------------------');
+    if (id.value == '') {
+      await getWorkplaceInfo();
+    }
   }
 
   Future<void> saveWorkplace(

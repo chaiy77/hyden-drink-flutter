@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sidebarx/sidebarx.dart';
+import 'package:hydenflutter/components/waitingWidget.dart';
 import 'package:get/get.dart';
 import 'package:hydenflutter/stores/controller/userController.dart';
 import 'package:hydenflutter/components/signOutButton.dart';
@@ -43,6 +44,22 @@ class MainLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
+    Widget mainWidget() {
+      if (workplace.id.value.isEmpty) {
+        return WaitingWidget();
+      }
+      return Container(
+          color: Colors.blue,
+          margin: const EdgeInsets.all(15.0),
+          child: Row(children: [
+            if (!isSmallScreen) SidebarMenu(controller: _controller),
+            Expanded(
+                child: Container(
+                    color: const Color.fromARGB(255, 114, 180, 95),
+                    child: Align(alignment: Alignment.topLeft, child: body))),
+          ]));
+    }
+
     _controller.selectIndex(menuIndex);
     return SafeArea(
         child: Scaffold(
@@ -62,17 +79,9 @@ class MainLayout extends StatelessWidget {
                     ),
                   )
                 : null,
-            body: Container(
-                color: Colors.blue,
-                margin: const EdgeInsets.all(15.0),
-                child: Row(children: [
-                  if (!isSmallScreen) SidebarMenu(controller: _controller),
-                  Expanded(
-                      child: Container(
-                          color: const Color.fromARGB(255, 114, 180, 95),
-                          child: Align(
-                              alignment: Alignment.topLeft, child: body))),
-                ]))));
+            body: Obx(() {
+              return mainWidget();
+            })));
     // child: Align(alignment: Alignment.topLeft, child: body))));
   }
 }
@@ -91,13 +100,13 @@ class SidebarMenu extends StatelessWidget {
     // final user = Get.put(Usercontroller());
     // String url = GoRouter.of(context).routerDelegate.currentConfiguration.fullPath;
     var url = ModalRoute.of(context)?.settings.name;
-    debugPrint("---------- Current Path -----------");
-    debugPrint(url.toString());
-    var r = ModalRoute.of(context);
-    debugPrint((r?.settings.name));
+    // debugPrint("---------- Current Path -----------");
+    // debugPrint(url.toString());
+    // var r = ModalRoute.of(context);
+    // debugPrint((r?.settings.name));
 
     // debugPrint(url.contains("pos").toString());
-    debugPrint("---------- -----------");
+    // debugPrint("---------- -----------");
     return SidebarX(
       controller: _controller,
       theme: SidebarXTheme(
@@ -161,10 +170,11 @@ class SidebarMenu extends StatelessWidget {
               height: 100,
               child: Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: user.username.value != null
+                  child: user.username.value.isNotEmpty
                       ? Text(user.email.value,
                           style: TextStyle(color: Colors.white))
-                      : Text('User', style: TextStyle(color: Colors.white))));
+                      : const Text('User',
+                          style: TextStyle(color: Colors.white))));
           // child: Image.asset('assets/images/avatar.png'),
         });
       },
