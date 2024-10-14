@@ -15,17 +15,10 @@ class SettingCustomer extends StatefulWidget {
 class _SettingCustomerState extends State<SettingCustomer> {
   String selectedCustID = '';
 
-  Future<void> _handleSaveNewCustomer() async {
-    safePrint('_handleSaveNewWorkspace');
-  }
-
   Future<void> _clickNewCustomer(BuildContext context) async {
     safePrint('_clickNewWorkspace');
     return await showDialog(
-        context: context,
-        builder: (context) => NewCustomerDialog(
-              onSaveNewCustomer: _handleSaveNewCustomer,
-            ));
+        context: context, builder: (context) => NewCustomerDialog());
   }
 
   @override
@@ -50,6 +43,8 @@ class _SettingCustomerState extends State<SettingCustomer> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                           CustomerSearchView(selectCustID: (data) {
+                            debugPrint(
+                                'selected customerID = ${data.toString()}');
                             setState(() {
                               selectedCustID = data.toString();
                             });

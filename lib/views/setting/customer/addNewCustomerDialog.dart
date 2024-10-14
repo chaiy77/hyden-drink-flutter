@@ -1,32 +1,119 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:hydenflutter/stores/controller/customerController.dart';
+import 'package:hydenflutter/stores/controller/workplaceController.dart';
+
+import 'package:hydenflutter/utils/tools.dart';
 
 class NewCustomerDialog extends StatefulWidget {
-  final Function onSaveNewCustomer;
-  const NewCustomerDialog({super.key, required this.onSaveNewCustomer});
+  // final Function onSaveNewCustomer;
+  const NewCustomerDialog({super.key});
 
   @override
   State<NewCustomerDialog> createState() => _NewCustomerDialogState();
 }
 
 class _NewCustomerDialogState extends State<NewCustomerDialog> {
-  bool? isProduct = false;
-  bool? needMaterial = false;
+  final customerController = Get.put(CustomerController());
+  final workplace = Get.put(WorkplaceController());
+
   late TextEditingController _nameController;
+  late TextEditingController _idController;
   late TextEditingController _addressController;
+  late TextEditingController _provinceController;
   late TextEditingController _zipcodeController;
   late TextEditingController _personController;
   late TextEditingController _telController;
 
+  bool _customID = false;
+
   @override
   void initState() {
-    debugPrint('_NewMachineDialogState -> initState()');
+    debugPrint('_NewCustomerDialogState -> initState()');
     super.initState();
     _addressController = TextEditingController();
     _nameController = TextEditingController();
+    _idController = TextEditingController();
+    _provinceController = TextEditingController();
     _zipcodeController = TextEditingController();
     _personController = TextEditingController();
     _telController = TextEditingController();
+
+    String _lastID = generateCustomerID(workplace.lastAutoCustomerID.value);
+    _idController.text = _lastID;
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    debugPrint('_NewCustomerDialogState -> dispose()');
+
+    super.dispose();
+    _addressController.dispose();
+    _nameController.dispose();
+    _idController.dispose();
+    _provinceController.dispose();
+    _zipcodeController.dispose();
+    _personController.dispose();
+    _telController.dispose();
+  }
+
+  void _setCustomID() {
+    setState(() {
+      _customID = !_customID;
+    });
+  }
+
+  Future<void> _clickSaveNewCustomer(BuildContext context) async {
+    debugPrint('--- clickSaveNewCustomer ----- ');
+    final name = _nameController.text;
+    final id = _idController.text;
+    final address = _addressController.text;
+    final province = _provinceController.text;
+    final zipcode = _zipcodeController.text;
+    final person = _personController.text;
+    final telephone = _telController.text;
+    var result = false;
+
+    if (name.isNotEmpty) {
+      result = await customerController.createCustomer(
+          id: id,
+          name: name,
+          address: address,
+          province: province,
+          zipcode: zipcode,
+          contactPerson: person,
+          telephone: telephone,
+          edit: false);
+      if (result) {
+        if (context.mounted) Navigator.of(context).pop();
+      } else {
+        Get.showSnackbar(const GetSnackBar(
+          title: "Error",
+          message: "Error in Create New Customer !!!!",
+          duration: Duration(seconds: 3),
+        ));
+      }
+
+      //  await productController.createProduct(
+      //   sku: value['sku'],
+      //   name: value['name'],
+      //   type: value['type'],
+      //   unit: value['unit'],
+      //   price: value['price'],
+      //   remark: "",
+      //   edit: false);
+      // Navigator.of(context).pop();
+    } else {
+      Get.showSnackbar(const GetSnackBar(
+        title: "Error",
+        message: "Customer's name cannot be empty !!!!",
+        duration: Duration(seconds: 3),
+      ));
+    }
+    // Navigator.of(context).pop();
+    // widget.onSaveNewCustomer();
   }
 
   @override
@@ -87,6 +174,49 @@ class _NewCustomerDialogState extends State<NewCustomerDialog> {
                                           Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2, child: Text('ID')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: TextField(
+                                                      enabled: _customID,
+                                                      textAlignVertical:
+                                                          const TextAlignVertical(
+                                                              y: 0),
+                                                      controller: _idController,
+                                                    )),
+                                                Expanded(
+                                                    flex: 2,
+                                                    child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .end,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Checkbox(
+                                                                  value:
+                                                                      !_customID,
+                                                                  onChanged:
+                                                                      (bool?
+                                                                          value) {
+                                                                    _setCustomID();
+                                                                  })),
+                                                          const Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                  'auto ')),
+                                                        ]))
+                                              ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
                                               children: [
                                                 const Expanded(
                                                     flex: 2,
@@ -99,6 +229,25 @@ class _NewCustomerDialogState extends State<NewCustomerDialog> {
                                                               y: 0),
                                                       controller:
                                                           _addressController,
+                                                    )),
+                                                const Expanded(
+                                                    flex: 1, child: Text('')),
+                                              ]),
+                                          Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                const Expanded(
+                                                    flex: 2,
+                                                    child: Text('Province')),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: TextField(
+                                                      textAlignVertical:
+                                                          const TextAlignVertical(
+                                                              y: 0),
+                                                      controller:
+                                                          _provinceController,
                                                     )),
                                                 const Expanded(
                                                     flex: 1, child: Text('')),
@@ -164,13 +313,24 @@ class _NewCustomerDialogState extends State<NewCustomerDialog> {
                                         ])))
                           ]),
                       Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                          child: FilledButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                                widget.onSaveNewCustomer();
-                              },
-                              child: const Text('Save')))
+                          padding: const EdgeInsets.fromLTRB(0, 20, 20, 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                FilledButton(
+                                    onPressed: () {
+                                      _clickSaveNewCustomer(context);
+                                    },
+                                    child: const Text('Save')),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                FilledButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text('Cancel'))
+                              ]))
                     ]))));
   }
 }

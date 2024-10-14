@@ -35,6 +35,7 @@ class _SettingProductState extends State<SettingProduct> {
     debugPrint('click _onSaveProductInfo = ${value.toString()}');
     await productController.createProduct(
         sku: value['sku'],
+        isAutoID: value['isAutoID'],
         name: value['name'],
         type: value['type'],
         unit: value['unit'],

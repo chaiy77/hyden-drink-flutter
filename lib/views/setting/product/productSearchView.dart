@@ -20,8 +20,8 @@ class ProductSearchView extends StatefulWidget {
 class _ProductSearchViewState extends State<ProductSearchView> {
   final productController = Get.put(ProductController());
 
-  final ScrollController _horizontal = ScrollController(),
-      _vertical = ScrollController();
+  final ScrollController _horizontal = ScrollController();
+  final ScrollController _vertical = ScrollController();
 
   void viewDetailClick(item) {
     debugPrint('click ${item.toString()}');

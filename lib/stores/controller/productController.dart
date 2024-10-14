@@ -1,9 +1,8 @@
 // ignore_for_file: file_names
-
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:hydenflutter/stores/graphQL/product.dart';
+import 'package:hydenflutter/stores/graphQL/productGraphQL.dart';
 import 'package:hydenflutter/stores/controller/userController.dart';
 import 'package:hydenflutter/stores/controller/workplaceController.dart';
 
@@ -26,6 +25,7 @@ class ProductController extends GetxController {
       required String type,
       required String unit,
       required double price,
+      required bool isAutoID,
       String remark = "",
       required bool edit}) async {
     safePrint('ProductController -> createProduct()');
@@ -37,6 +37,7 @@ class ProductController extends GetxController {
       'userId': userId,
       'workplaceId': workplaceId,
       'id': sku,
+      'isAutoID': isAutoID,
       'name': name,
       'type': type,
       'unit': unit,

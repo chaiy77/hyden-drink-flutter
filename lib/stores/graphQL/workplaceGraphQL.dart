@@ -1,3 +1,16 @@
+String getWorkplaceInfoGraphQL =
+    '''query getWorkplaceInfo(\$userId: String!, \$workplaceId: String!) {
+      getWorkplaceInfo(userId:\$userId, workplaceId:\$workplaceId) {
+        id
+        name
+        address
+        zipcode
+        telephone
+        lastAutoSku
+        error
+      }
+    }''';
+
 String getWorkplaceByUserIdGraphQL =
     '''query getWorkplaceByUserId(\$userId: String!) {
       getWorkplaceByUserId(userId:\$userId) {

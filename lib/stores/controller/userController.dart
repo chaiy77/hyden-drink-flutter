@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:hydenflutter/stores/graphQL/user.dart';
+import 'package:hydenflutter/stores/graphQL/userGraphQL.dart';
+// import 'package:hydenflutter/stores/controller/workplaceController.dart';
 
 class UserController extends GetxController {
+  // final workplace = Get.put(WorkplaceController());
+
   var username = ''.obs;
   var id = ''.obs;
   var email = ''.obs;
@@ -254,6 +257,8 @@ class UserController extends GetxController {
         Map jsonData = (json.decode(data) as Map).cast<String, Object?>();
         email.value = jsonData['getUser']['email'];
         username.value = jsonData['getUser']['email'];
+        workplaceId.value = jsonData['getUser']['workplaceId'] ?? '';
+        workplaceName.value = jsonData['getUser']['workplaceName'] ?? '';
         registerDate.value = jsonData['getUser']['registerDate'] ?? 0;
         type.value = jsonData['getUser']['type'] ?? '';
         status.value = jsonData['getUser']['status'] ?? '';

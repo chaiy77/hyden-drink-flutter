@@ -73,6 +73,7 @@ class _NewProductDialogState extends State<NewProductDialog> {
         widget.onSaveProduct({
           'name': name,
           'sku': sku,
+          'isAutoID': _customSku,
           'type': type,
           'unit': unit,
           'price': double.parse(price)

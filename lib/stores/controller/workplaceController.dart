@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:hydenflutter/stores/graphQL/workplace.dart';
+import 'package:hydenflutter/stores/graphQL/workplaceGraphQL.dart';
 import 'package:hydenflutter/stores/controller/userController.dart';
 
 class WorkplaceController extends GetxController {
@@ -13,6 +13,8 @@ class WorkplaceController extends GetxController {
   var zipcode = ''.obs;
   var telephone = ''.obs;
   var lastAutoSku = ''.obs;
+  var lastAutoCustomerID = ''.obs;
+  var lastAutoSupplierID = ''.obs;
   var igetGateway = ''.obs;
   var isWaitng = false;
 
@@ -80,6 +82,42 @@ class WorkplaceController extends GetxController {
 
   Future<void> getWorkplaceInfo() async {
     final userId = user.id.value;
+    final workplaceId = user.workplaceId.value;
+    safePrint(' ----  getWorkplaceInfo -> userId = $userId');
+    safePrint(' ----  getWorkplaceInfo -> workplaceId = $workplaceId');
+    if (workplaceId.isNotEmpty) {
+      try {
+        final query = await Amplify.API
+            .query(
+              request: GraphQLRequest<String>(
+                  document: getWorkplaceInfoGraphQL,
+                  variables: {'userId': userId, 'workplaceId': workplaceId}),
+            )
+            .response;
+        // final result = await query.response;
+        final data = query.data;
+        safePrint('getWorkplaceInfo data $data');
+        if (data != null) {
+          Map jsonData = (json.decode(data) as Map).cast<String, Object?>();
+          id.value = jsonData['getWorkplaceInfo']['id'] ?? '';
+          name.value = jsonData['getWorkplaceInfo']['name'] ?? '';
+          address.value = jsonData['getWorkplaceInfo']['address'] ?? '';
+          zipcode.value = jsonData['getWorkplaceInfo']['zipcode'] ?? '';
+          telephone.value = jsonData['getWorkplaceInfo']['telephone'] ?? '';
+          lastAutoSku.value = jsonData['getWorkplaceInfo']['lastAutoSku'] ?? '';
+        }
+      } on ApiException catch (e) {
+        safePrint('Query user failed $e');
+      }
+    } else {
+      Get.showSnackbar(const GetSnackBar(
+          message: "workplace ID can not be empty",
+          title: "Get Workplace Error"));
+    }
+  }
+
+  Future<void> getWorkplaceInfoByUserId() async {
+    final userId = user.id.value;
     safePrint(' ----  getWorkplaceInfo -> userId = $userId');
     try {
       final query = await Amplify.API
@@ -103,7 +141,7 @@ class WorkplaceController extends GetxController {
             jsonData['getWorkplaceByUserId']['lastAutoSku'] ?? '';
       }
     } on ApiException catch (e) {
-      safePrint('Query user failed $e');
+      safePrint('Query Workplace info by userId  failed $e');
     }
   }
 }

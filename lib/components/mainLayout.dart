@@ -36,7 +36,7 @@ class MainLayout extends StatelessWidget {
   final int menuIndex;
   final _key = GlobalKey<ScaffoldState>();
   final user = Get.put(UserController());
-  final workplace = Get.put(WorkplaceController());
+  // final workplace = Get.put(WorkplaceController());
 
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
 
@@ -45,19 +45,26 @@ class MainLayout extends StatelessWidget {
     final isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     Widget mainWidget() {
-      if (workplace.id.value.isEmpty) {
+      if (user.workplaceId.value.isEmpty) {
         return WaitingWidget();
+      } else {
+        final workplace = Get.put(WorkplaceController());
+        if (workplace.id.value.isEmpty) {
+          return WaitingWidget();
+        } else {
+          return Container(
+              color: Colors.blue,
+              margin: const EdgeInsets.all(15.0),
+              child: Row(children: [
+                if (!isSmallScreen) SidebarMenu(controller: _controller),
+                Expanded(
+                    child: Container(
+                        color: const Color.fromARGB(255, 114, 180, 95),
+                        child:
+                            Align(alignment: Alignment.topLeft, child: body))),
+              ]));
+        }
       }
-      return Container(
-          color: Colors.blue,
-          margin: const EdgeInsets.all(15.0),
-          child: Row(children: [
-            if (!isSmallScreen) SidebarMenu(controller: _controller),
-            Expanded(
-                child: Container(
-                    color: const Color.fromARGB(255, 114, 180, 95),
-                    child: Align(alignment: Alignment.topLeft, child: body))),
-          ]));
     }
 
     _controller.selectIndex(menuIndex);
